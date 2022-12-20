@@ -1691,7 +1691,7 @@ class Recognizer(AudioSource):
             self.whisper_model = getattr(self, "whisper_model", {})
             self.whisper_model[model] = whisper.load_model(model, **load_options or {})
 
-        with tempfile.NamedTemporaryFile(suffix=".wav") as f:
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False if platform.system() == "Windows" else True) as f:
             f.write(audio_data.get_wav_data())
             f.flush()
             result = self.whisper_model[model].transcribe(
